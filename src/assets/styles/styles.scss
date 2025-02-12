@@ -1,0 +1,6 @@
+// 入口文件，统一引入所有SCSS
+// src/styles/styles.scss
+@use "./variables" as *;
+@use "./global" as *;
+@use "./editor" as *;
+@use "./preview" as *;
