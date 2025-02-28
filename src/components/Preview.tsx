@@ -7,9 +7,10 @@ import DOMPurify from "dompurify"; //引入DOMPurify
 
 interface PreviewProps {
     content: string; // 定义props，传递HTML
+    previewRef: React.RefObject<HTMLDivElement | null>
 }
 
-const Preview: React.FC<PreviewProps> = ({ content }) => {
+const Preview: React.FC<PreviewProps> = ({ content, previewRef }) => {
     useEffect(() => {
         // 让highlight.js 解析页面中的代码块
         document.querySelectorAll("pre code").forEach((block) => {
@@ -23,7 +24,9 @@ const Preview: React.FC<PreviewProps> = ({ content }) => {
     return (
         <div className="preview-container">
             <h2>预览区</h2>
-            <div className="preview-content markdown-body" dangerouslySetInnerHTML={{ __html: cleanContent }}/>
+            <div className="preview-content markdown-body" 
+                ref={previewRef}
+                dangerouslySetInnerHTML={{ __html: cleanContent }}/>
         </div>
     )
 }

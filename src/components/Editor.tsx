@@ -20,15 +20,19 @@ const md = new MarkdownIt({
 
 interface EditorProps {
     setHtmlString: (html: string) => void; // 定义 props，传递 Markdown 解析后的 HTML
+    editorRef: React.RefObject<HTMLTextAreaElement | null> // 引用编辑区
+    onScroll: () => void // 处理滚动事件的函数
 }
 
-const Editor: React.FC<EditorProps> = ({ setHtmlString }) => {
+const Editor: React.FC<EditorProps> = ({ setHtmlString, editorRef, onScroll }) => {
     return (
         <div className="editor-container">
             <h2>编辑区</h2>
             <textarea className="edit"
             placeholder="在这里输入 Markdown..."
-            onChange={(e) => setHtmlString(md.render(e.target.value))} />
+            ref={editorRef}
+            onChange={(e) => setHtmlString(md.render(e.target.value))}
+            onScroll={onScroll} />
         </div>
     );
 };
