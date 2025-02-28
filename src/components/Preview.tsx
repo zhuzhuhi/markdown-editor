@@ -3,6 +3,7 @@ import '../assets/styles/styles.scss'
 import '../assets/styles/github-markdown.css'
 import hljs from "highlight.js"; // 引入 highlight.js
 import "highlight.js/styles/github.css"; // 代码高亮样式
+import DOMPurify from "dompurify"; //引入DOMPurify
 
 interface PreviewProps {
     content: string; // 定义props，传递HTML
@@ -16,10 +17,13 @@ const Preview: React.FC<PreviewProps> = ({ content }) => {
         })
     }, [content]) // 当 content 变化时，执行高亮
 
+    // 清理传入的 HTML 内容，避免 XSS 攻击
+    const cleanContent = DOMPurify.sanitize(content)
+
     return (
         <div className="preview-container">
             <h2>预览区</h2>
-            <div className="preview-content markdown-body" dangerouslySetInnerHTML={{ __html: content }}/>
+            <div className="preview-content markdown-body" dangerouslySetInnerHTML={{ __html: cleanContent }}/>
         </div>
     )
 }

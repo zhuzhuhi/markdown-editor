@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "dompurify": "^3.2.4",
     "generate-github-markdown-css": "^6.5.1",
     "highlight.js": "^11.11.1",
     "markdown-it": "^14.1.0",
