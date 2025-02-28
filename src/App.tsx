@@ -28,10 +28,24 @@ const App: React.FC = () => {
 
   }
 
+  // 同步滚动：当预览区滚动时，更新编辑区的滚动
+  const handlePreviewScroll = () => {
+    if(editorRef.current && previewRef.current) {
+      const editor = editorRef.current
+      const preview = previewRef.current
+
+      // 计算预览区滚动的比例
+      const scrollPercentage = preview.scrollTop / (preview.scrollHeight - preview.clientHeight)
+
+      //根据滚动比例更新编辑区的滚动位置
+      editor.scrollTop = scrollPercentage * (editor.scrollHeight - editor.clientHeight)
+    }
+  }
+
   return (
     <div className='container'>
       <Editor setHtmlString={setHtmlString} editorRef={editorRef} onScroll={handleEditorScroll} />
-      <Preview content={htmlString} previewRef={previewRef} />
+      <Preview content={htmlString} previewRef={previewRef} onScroll={handlePreviewScroll} />
     </div>
   )
 }
