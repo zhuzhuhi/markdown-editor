@@ -6,6 +6,19 @@ import Editor from './components/Editor'
 import Preview from './components/Preview'
 import './assets/styles/styles.scss'
 
+// 自定义 throttle 函数
+function throttle<T extends (...args: any[]) => any>(func: T, delay: number): T {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  return function (this: any, ...args: any[]) {
+    if (timeoutId === null) {
+      func.apply(this, args);
+      timeoutId = setTimeout(() => {
+        timeoutId = null;
+      }, delay);
+    }
+  } as T;
+}
+
 const App: React.FC = () => {
   // 定义 state， 存储 Markdown 解析后的 HTML
   const [htmlString, setHtmlString] = useState("");
@@ -64,10 +77,14 @@ const App: React.FC = () => {
     isSyncingFromPreview = false
   }
 
+  // 使用throttle包装滚动处理函数，设置节流时间为100ms
+  const throttledHandleEditorScroll = throttle(handleEditorScroll, 100)
+  const throttledHandlePreviewScroll = throttle(handlePreviewScroll, 100)
+
   return (
     <div className='container'>
-      <Editor setHtmlString={setHtmlString} editorRef={editorRef} onScroll={handleEditorScroll} />
-      <Preview content={htmlString} previewRef={previewRef} onScroll={handlePreviewScroll} />
+      <Editor setHtmlString={setHtmlString} editorRef={editorRef} onScroll={throttledHandleEditorScroll} />
+      <Preview content={htmlString} previewRef={previewRef} onScroll={throttledHandlePreviewScroll} />
     </div>
   )
 }
